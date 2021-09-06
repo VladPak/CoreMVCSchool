@@ -42,6 +42,7 @@ namespace CRUD_School294.Controllers
                     teachers = teachers.OrderByDescending(s => s.teacherDob).ToList();
                     break;
                 default:
+                    teachers = teachers.OrderBy(s => s.teacherName).ToList();
                     break;
             }
             return View(teachers);
