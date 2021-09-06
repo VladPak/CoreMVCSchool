@@ -1,0 +1,88 @@
+﻿@model IEnumerable<CRUD_School294.Models.Students>
+
+@{
+    ViewData["Title"] = "All Students";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-2">
+            <h2 class="text-info">Students</h2>
+        </div>
+        <div class="col-10 text-right">
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <p>
+                        Search by Name & Surname (case sensitive): <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                        <input type="submit" value="Search" class="btn btn-primary" /> &nbsp;&nbsp;
+                        <a asp-action="Index" class="btn btn-warning">Refresh list</a>
+                        <a class="btn btn-success" asp-controller="Students" asp-action="Create">Add Student</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+        @*<div class="col-4 text-right">
+                <a class="btn btn-success" asp-area="" asp-controller="Students" asp-action="Create">Add Student</a>
+            </div>*@
+    </div>
+    </br>
+
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr class="text-center">
+                    <th>
+                        Surname
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Date of Birth
+                    </th>
+                    <th>
+                        Class Letter
+                    </th>
+                    <th>
+                        Contact
+                    </th>
+                    <th>
+                        Contact 2
+                    </th>
+                    <th>
+                        Contact 3
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td width="10%">@item.studentSurname</td>
+                        <td width="10%">@item.studentName</td>
+                        <td width="10%">@item.studentDob.ToShortDateString()</td>
+                        <td width="10%">@item.studentClass</td>
+                        <td width="10%">@item.studentContacts</td>
+                        <td width="10%">@item.studentContact2</td>
+                        <td width="10%">@item.studentContact3</td>
+                        <td width="30%">
+                            <div class="w-100 btn-group" role="group">
+                                <a asp-controller="Students" asp-action="Edit" asp-route-id="@item.studentId" class="btn btn-warning mx-1">Update</a>
+                                <a onclick="return confirm('Are you sure you want to delete?');" asp-controller="Students" asp-action="Delete" asp-route-id="@item.studentId" class="btn btn-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No items to show</p>
+    }
+
+</div>
