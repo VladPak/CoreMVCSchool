@@ -17,9 +17,23 @@ namespace CRUD_School294.Controllers
             _db = dbContext;
         }
 
-        public IActionResult Index(string searchString, string sortOrder)
+        public IActionResult Index(string searchString, string sortOrder, int pg=1)
         {
-            var teachers = _db.Teachers.ToList();
+            const int pageSize = 5;
+
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+
+            int recsCount = _db.Teachers.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+
+            int recSkip = (pg - 1) * pageSize;
+            var teachers = _db.Teachers.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+
+            //var teachers = _db.Teachers.ToList();
             ViewData["CurrentFilter"] = searchString;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";

@@ -1,8 +1,18 @@
 ﻿@model IEnumerable<CRUD_School294.Models.Teachers>
 
 @{
-    ViewData["Title"] = "All Teachers"; 
+    ViewData["Title"] = "All Teachers";
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
 }
+
 
 
 <div class="container p-3">
@@ -23,6 +33,7 @@
             </form>
         </div>
     </div>
+    <partial name="_pager" model="@pager" />
     </br>
 
     @if (Model.Count() > 0)
@@ -53,19 +64,19 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td width="14%">@item.teacherSurname</td>
-                    <td width="14%">@item.teacherName</td>
-                    <td width="14%">@item.teacherDob.ToShortDateString()</td>
-                    <td width="14%">@item.teacherContacts</td>
-                    <td width="14%">@item.studentContact2</td>
-                    <td width="30%">
-                        <div class="w-100 btn-group" role="group">
-                            <a asp-controller="Teachers" asp-action="Edit" asp-route-id="@item.teacherId" class="btn btn-warning mx-1">Update</a>
-                            <a onclick="return confirm('Are you sure you want to delete a teacher?');" asp-controller="Teachers" asp-action="Delete" asp-route-id="@item.teacherId" class="btn btn-danger">Delete</a>
-                        </div>
-                    </td>
-                </tr>
+                    <tr>
+                        <td width="14%">@item.teacherSurname</td>
+                        <td width="14%">@item.teacherName</td>
+                        <td width="14%">@item.teacherDob.ToShortDateString()</td>
+                        <td width="14%">@item.teacherContacts</td>
+                        <td width="14%">@item.studentContact2</td>
+                        <td width="30%">
+                            <div class="w-100 btn-group" role="group">
+                                <a asp-controller="Teachers" asp-action="Edit" asp-route-id="@item.teacherId" class="btn btn-warning mx-1">Update</a>
+                                <a onclick="return confirm('Are you sure you want to delete a teacher?');" asp-controller="Teachers" asp-action="Delete" asp-route-id="@item.teacherId" class="btn btn-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -74,5 +85,8 @@
     {
         <p>No items to show</p>
     }
+
+    <partial name="_pager" model="@pager" />
+
 
 </div>
