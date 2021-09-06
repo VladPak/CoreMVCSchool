@@ -29,7 +29,7 @@ namespace CRUD_School294.Controllers
             {
                 teachers = teachers.Where(x => x.teacherSurname.Contains(searchString) || x.teacherName.Contains(searchString)).ToList();
             }
-
+            //commetn
             switch (sortOrder)
             {
                 case "name_desc":
