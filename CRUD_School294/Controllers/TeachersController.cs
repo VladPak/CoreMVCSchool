@@ -17,14 +17,32 @@ namespace CRUD_School294.Controllers
             _db = dbContext;
         }
 
-        public IActionResult Index(string searchString)
+        public IActionResult Index(string searchString, string sortOrder)
         {
             var teachers = _db.Teachers.ToList();
             ViewData["CurrentFilter"] = searchString;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 teachers = teachers.Where(x => x.teacherSurname.Contains(searchString) || x.teacherName.Contains(searchString)).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    teachers = teachers.OrderByDescending(s => s.teacherName).ToList();
+                    break;
+                case "Date":
+                    teachers = teachers.OrderBy(s => s.teacherDob).ToList();
+                    break;
+                case "date_desc":
+                    teachers = teachers.OrderByDescending(s => s.teacherDob).ToList();
+                    break;
+                default:
+                    break;
             }
             return View(teachers);
         }
