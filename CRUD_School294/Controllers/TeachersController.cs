@@ -1,8 +1,10 @@
 ﻿using CRUD_School294.Data;
 using CRUD_School294.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +21,7 @@ namespace CRUD_School294.Controllers
 
         public IActionResult Index(string searchString, string sortOrder, int pg=1)
         {
-            const int pageSize = 5;
+            const int pageSize = 10;
 
             if (pg < 1)
             {
@@ -38,12 +40,11 @@ namespace CRUD_School294.Controllers
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-
             if (!String.IsNullOrEmpty(searchString))
             {
                 teachers = teachers.Where(x => x.teacherSurname.Contains(searchString) || x.teacherName.Contains(searchString)).ToList();
             }
-            //commetn
+
             switch (sortOrder)
             {
                 case "name_desc":
@@ -61,6 +62,34 @@ namespace CRUD_School294.Controllers
             }
             return View(teachers);
         }
+
+        [HttpPost]
+        public ActionResult Index(FormCollection formCollection)
+        {
+            var file = Request.Form.Files["fileToImport"];
+
+            if (file == null)
+            {
+                ViewBag.Result = "File is missing";
+                return View();
+            }
+
+            return View(); ;
+        }
+
+        //private List<string> SaveTeachersToDb(List<Teachers> model, List<string> errors)
+        //{
+        //    try
+        //    {
+        //        _db.Teachers.Add();
+        //        _db.SaveChanges();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        errors.Add("Errors inserting employees : " + ex.Message);
+        //    }
+        //    return errors;
+        //}
 
         public IActionResult Create()
         {
